@@ -1,30 +1,33 @@
 <?php 
-
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 
-class TestController extends Controller {
+class TestController extends Controller 
+{
 
-    public function index()       {
-        return view('test');
+    public function index()       
+    {
+        return view(test);
+    }
+    
+    public function hello()       
+    {
+        // используя with()
+        
+        return view('hellotest')->with('name', 'Janus Nic');
+
     }
 
-    public function fooIndex()       {
-        return view('test');
+    public function bax()       
+    {
+        return view('hellotest')->withName('Bax And Janus Nic With Name');
     }
 
-    public function barIndex()       {
-        return view('hello')->with('name', 'Janus Nic');
+    public function baz()       
+    {
+        return view('hellotest', ['name' => 'Baz Janus Nic As Name']);
     }
 
-    public function baxIndex()       {
-        return view('hello')->withName('Janus Nic With Name');
-    }
 
-    public function bazIndex()       {
-        if (view()->exists('hello')) {
-            return view('hello', ['name' => 'Janus Nic As Name']);
-        }
-    }
 }

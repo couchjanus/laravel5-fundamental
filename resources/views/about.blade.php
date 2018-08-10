@@ -2,6 +2,7 @@
 
 <html>
    <body>
-       <h1>Hello, Test Controller!</h1>
+       <h1>{{$title}}</h1>
+       <h3>Hello, About Controller!</h3>
    </body>
 </html>

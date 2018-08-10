@@ -15,27 +15,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/hey', function()
-{
-    return 'Hello World';
-});
+Route::get('blog', ['uses' => 'PostsController@index', 'as' => 'blog']);
 
-Route::get('/hell', function() {
-    return view('greeting');
-});
+Route::get('blog/create', ['uses' => 'PostsController@create', 'as' => 'create']);
+Route::post('blog/store', ['uses' => 'PostsController@store', 'as' => 'store']);
 
-Route::get('/jan', function() {
-    return view('hello.greeting', ['name' => 'Janus']);
-});
+Route::get('blog/{id}', ['uses' => 'PostsController@show', 'as' => 'show']);
 
-Route::get('/about', 'AboutController');
 
-Route::get('/test', 'TestController@index');
 
-Route::get('foo', ['uses' => 'TestController@fooIndex', 'as' => 'name']);
-
-Route::get('bar', 'TestController@barIndex');
-
-Route::get('bax', 'TestController@baxIndex');
-
-Route::get('baz', 'TestController@bazIndex');
