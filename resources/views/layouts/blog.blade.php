@@ -1,15 +1,9 @@
 @extends('layouts.app')
-
-    {{--Styles--}}
+    
     @section('styles')
-        
-        <!-- Bootstrap core CSS -->
-        <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-        <!-- Custom styles for this template -->
-        <link href="/css/styles.css" rel="stylesheet">
-
+        @include('partials.styles')
     @endsection
-
+    
     {{--Head--}}
     @section('head')
     @endsection
@@ -21,10 +15,12 @@
     {{--Page--}}
     
     @section('page')
-       <div class="row">
+      <main role="main" class="container">
+        <div class="row">
           @yield('content')
           @yield('sidebar')
-       </div>
+        </div><!-- /.row -->
+      </main>
     @endsection
 
     @section('footer')
@@ -34,7 +30,5 @@
     {{--Scripts--}}
 
     @section('scripts')
-        <!-- Bootstrap core JavaScript -->
-        <script src="/vendor/jquery/jquery.min.js"></script>
-        <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     @endsection
+   

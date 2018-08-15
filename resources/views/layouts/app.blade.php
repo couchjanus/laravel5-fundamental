@@ -21,9 +21,13 @@
         @yield('meta')
 
         {{--Common App Styles--}}
-        
 
-        {{--Styles--}}
+        <!-- Fonts -->
+
+        <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
+
+        <link href="/css/app.css" rel="stylesheet">
+
         @yield('styles')
 
         {{--Head--}}
@@ -45,11 +49,13 @@
         
         {{--Common Scripts--}}
 
+        <!-- Bootstrap core JavaScript -->
+        <script src="/js/app.js"></script>
+
         {{--Laravel Js Variables--}}
 
         {{--Scripts--}}
-
         @yield('scripts')
-        
+    
     </body>
 </html>
