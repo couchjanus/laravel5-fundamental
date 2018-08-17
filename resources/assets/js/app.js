@@ -17,6 +17,42 @@ window.Vue = require('vue');
 
 Vue.component('example-component', require('./components/ExampleComponent.vue'));
 
+Vue.component('pagination', require('./components/PaginationComponent.vue'));
+
 const app = new Vue({
-    el: '#app'
+    el: '#app',
+    data: {
+        items: [],
+        message: 'Hi Vue!',
+        hasError: true,
+        posts: {},
+        pagination: {
+          'current_page': 1
+        }
+    },
+    mounted : function(){
+        this.getVueItems();
+        this.fetchPosts();
+    },
+    created: function () {
+        console.log('Значение message: ' + this.message);  // `this` указывает на экземпляр app
+    },
+    methods : {
+        getVueItems: function(){
+            axios.get('/vue/news').then((response) => {
+                this.items = response.data;
+            });
+        },
+        
+        fetchPosts: function() {
+            axios.get('/vue/posts?page=' + this.pagination.current_page)
+                .then(response => {
+                    this.posts = response.data.data.data;
+                    this.pagination = response.data.pagination;
+                })
+                .catch(error => {
+                    console.log(error.response.data);
+                });
+        }
+    }
 });

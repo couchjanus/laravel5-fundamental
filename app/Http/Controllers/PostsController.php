@@ -21,6 +21,27 @@ class PostsController extends Controller
 
     }
 
+    public function list()
+    {
+
+        $posts = \App\Post::paginate(5);
+
+        $response = [
+            'pagination' => [
+                'total' => $posts->total(),
+                'per_page' => $posts->perPage(),
+                'current_page' => $posts->currentPage(),
+                'last_page' => $posts->lastPage(),
+                'from' => $posts->firstItem(),
+                'to' => $posts->lastItem()
+            ],
+            'data' => $posts
+        ];
+
+        return response()->json($response);
+
+    }
+
     /**
      * Show the form for creating a new resource.
      *
