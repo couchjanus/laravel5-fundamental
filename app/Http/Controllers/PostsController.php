@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use DB;
+use App\Post;
 
 class PostsController extends Controller
 {
@@ -14,11 +15,9 @@ class PostsController extends Controller
      */
     public function index()
     {
-
-        $posts = DB::select('select * from posts');
-
+        $posts = \App\Post::paginate(5);
+        // var_dump($posts);
         return view('blog.index', ['posts' => $posts]);
-
     }
 
     public function list()
@@ -43,29 +42,6 @@ class PostsController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        return view('posts.create');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-        public function store(Request $request)
-        {
-            DB::insert('insert into posts (title, content, category_id) 
-            values (?, ?, ?)', [$request['title'], $request['content'], 1]);
-            
-        }
-
-    /**
      * Display the specified resource.
      *
      * @param  int  $id
@@ -79,40 +55,57 @@ class PostsController extends Controller
 
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+    // PostsController, метод showBySlug:
+    public function showBySlug($slug) 
     {
-       return view('posts.create');
+        /** 
+         * Вначале мы проверяем, не является ли слаг числом. 
+         * Часто слаги внедряют в программу уже после того, 
+         * как был другой механизм построения пути. 
+         * Например, через числовые индексы. 
+         * Тогда может получится ситуация, что пользователь, 
+         * зайдя на сайт по старой ссылке, увидит 404 ошибку, 
+         * что такой страницы не существует. 
+        */
+        if (is_numeric($slug)) {
+            // Get post for slug.
+            $post = Post::findOrFail($slug);
+            
+            return Redirect::to(route('blog.show', $post->slug), 301); 
+            // 301 редирект со старой страницы, на новую.    
+        }
+        // Get post for slug.
+        $post = Post::whereSlug($slug)->firstOrFail();
 
+        return view('blog.show', [
+            'post' => $post,
+            'hescomment' => true
+            ]
+        );
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+    public function getById($id)
     {
-        $sql = "UPDATE posts SET title= ? content= ? WHERE id= ?";
-        DB::update($sql, array($request['title'], $request['content'], 'id' => $id));
+        // Получить конкретные записи с помощью find или first. 
+        // Вместо коллекции моделей эти методы возвращают один экземпляр модели:
+
+        // Получение модели по её первичному ключу...
+
+        return  \App\Post::find($id);
+
+        // return \App\Post::findOrFail($id);
+
+        // return App\Post::where('id', '>', $id)->firstOrFail();
 
     }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+    
+    public function getFirstActive()
     {
-        DB::table('posts')->where('id', '=', $id)->delete();
+        // Получить конкретные записи с помощью find или first. 
+        // Вместо коллекции моделей эти методы возвращают один экземпляр модели:
+        // Получение первой модели, удовлетворяющей условиям...
+
+        return \App\Post::where('active', 1)->first();
+        
     }
 }

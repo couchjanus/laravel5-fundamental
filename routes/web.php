@@ -27,7 +27,6 @@ Route::get('/vue/news', function () {
 Route::get('/news', function () {
     return view('home.news');
 });
- 
 
 Route::get('/list', function () {
     return view('home.index');
@@ -35,19 +34,15 @@ Route::get('/list', function () {
 
 Route::get('/vue/posts', 'PostsController@list')->name('blogposts');
 
-
 Route::get('blog', ['uses' => 'PostsController@index', 'as' => 'blog']);
 
-Route::get('blog/create', ['uses' => 'PostsController@create', 'as' => 'create']);
-Route::post('blog/store', ['uses' => 'PostsController@store', 'as' => 'store']);
+Route::get('blog/{slug}', 'PostsController@showBySlug')->name('blog.show');
 
-Route::get('blog/{id}', ['uses' => 'PostsController@show', 'as' => 'blog.show']);
+Route::get('blog/{id}', ['uses' => 'PostsController@show', 'as' => 'blog.showById']);
+
 
 Route::get('admin', ['uses' => 'Admin\DashboardController@index', 'as' => 'admin']);
-
 Route::resource('posts', 'Admin\PostsController'); 
-
 Route::resource('categories', 'Admin\CategoriesController'); 
-
 Route::resource('tags', 'Admin\TagsController'); 
 

@@ -1,19 +1,14 @@
 @extends('layouts.admin')
-
 @section('content')
 <div class="container-fluid">
   <div class="animate fadeIn">
     <div class="col-md-12">
       <div class="panel panel-default">
-        <div class="panel-heading"><h2>Categories</h2></div>
+        <div class="panel-heading">Categories <a href="{{ url('/categories/create') }}" class="btn btn-success btn-sm float-right" title="Add New Category">
+          <span data-feather="plus"></span> Add New
+        </a></div>
           <div class="panel-body">
-            <a href="{{ url('/categories/create') }}" class="btn btn-success btn-sm pull-right" title="Add New Category">
-              <span data-feather="plus"></span> Add New
-            </a>
-            <br/>
-            <br/>
             <div class="table-responsive">
-                  
               <table class="table table-hover table-striped table-sm">
                 <thead>
                   <tr>

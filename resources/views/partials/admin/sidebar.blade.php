@@ -8,6 +8,18 @@
               </a>
             </li>
             <li class="nav-item">
+                <a class="nav-link" href="/categories">
+                  <span data-feather="file-text"></span>
+                  Categories
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/posts">
+                  <span data-feather="file-text"></span>
+                  Posts
+                </a>
+            </li>
+            <li class="nav-item">
               <a class="nav-link" href="#">
                 <span data-feather="file"></span>
                 Orders
