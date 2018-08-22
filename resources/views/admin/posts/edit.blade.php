@@ -53,6 +53,15 @@
                                 @endforeach
                             </select>
                         </div>
+
+                        <div class="form-group">
+                            <label>Post Tags</label>
+                              <select class="form-control select2-multi" name="tags[]" multiple="multiple" id="tags">
+                                @foreach($tags as $tag)
+                                  <option value='{{ $tag->id }}' {{ (collect(old('tags'))->contains($tag->id)) ? 'selected':'' }}>{{ $tag->name }}</option>
+                                @endforeach
+                              </select>
+                        </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-md-3 col-form-label">Is Active</label>
@@ -79,3 +88,15 @@
   </div>
 </div>
 @endsection  
+
+@section('scripts')
+
+<script>
+    $('.select2-multi').select2({
+        placeholder: 'Choose A Tag',
+        tags: true
+    });
+    $('#tags').select2().val({!! json_encode($post->tags()->allRelatedIds()->toArray()) !!}).trigger('change');
+</script>   
+@endsection
+   

@@ -3,6 +3,7 @@
     @section('styles')
         <!-- Custom styles for this template -->
         <link href="/css/dashboard.css" rel="stylesheet">
+        <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
     @endsection
     
     {{--Head--}}
@@ -34,17 +35,9 @@
       </div>
     @endsection
 
-    @section('footer')
-   
+    @section('adminscripts')
+      {{--Scripts--}}
+      @include('partials.admin._scripts')    
     @endsection
     
-    {{--Scripts--}}
-
-    @section('scripts')
-        <!-- Icons -->
-        <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
-        <script>
-        feather.replace()
-        </script>
-    @endsection
-   
+ 

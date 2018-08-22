@@ -9,19 +9,7 @@
             Add New Post <a href="{{ route('posts.index') }}" class="btn btn-success btn-sm  float-right" title="All posts"> <span data-feather="arrow-left"></span>  Go Back</a>
         </div>
         <div class="panel-body">
-            @if (Session::get('message') != Null)
-            <div class="row">
-                <div class="col-md-9">
-                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                        {{ Session::get('message') }}
-                    </div>
-                </div>
-            </div>
-            @endif
-            <br/>
+            @include('partials.admin._messages')
             <div class="table-responsive">
               <form action="{{ route('posts.store') }}" method="post">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
@@ -43,7 +31,16 @@
                                 @endforeach
                             </select>
                         </div>
+                        <div class="form-group">
+                            <label>Post Tags</label>
+                              <select class="form-control select2-multi" name="tags[]" multiple="multiple">
+                                @foreach($tags as $tag)
+                                  <option value='{{ $tag->id }}'>{{ $tag->name }}</option>
+                                @endforeach
+                              </select>
+                        </div>
                     </div>
+                    
                     <div class="form-group row">
                             <label class="col-md-3 col-form-label">Is Active</label>
                             <div class="col-md-9">
@@ -69,3 +66,12 @@
   </div>
 </div>
 @endsection  
+@section('scripts')
+
+<script>
+       $('.select2-multi').select2({
+           placeholder: 'Choose A Tag',
+           tags: true
+       });
+</script>
+@endsection

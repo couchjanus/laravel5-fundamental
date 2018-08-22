@@ -53,7 +53,7 @@
         <script src="/js/app.js"></script>
 
         {{--Laravel Js Variables--}}
-
+        @yield('adminscripts')
         {{--Scripts--}}
         @yield('scripts')
     

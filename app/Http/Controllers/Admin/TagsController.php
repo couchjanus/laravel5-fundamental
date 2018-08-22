@@ -7,7 +7,6 @@ use App\Http\Controllers\Controller;
 
 use App\Tag;
 
-
 class TagsController extends Controller
 {
     /**
@@ -17,7 +16,10 @@ class TagsController extends Controller
      */
     public function index()
     {
-        //
+        $tags = Tag::paginate(10);
+
+        return view('admin.tags.index')
+            ->with('tags', $tags);
     }
 
     /**
@@ -27,7 +29,7 @@ class TagsController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.tags.create');
     }
 
     /**
@@ -38,7 +40,10 @@ class TagsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $tag = new Tag;
+        $tag->name = $request->name;
+        $tag->save();
+        return redirect(route('tags.index'))->with('message', 'An tag has been added');
     }
 
     /**
@@ -58,9 +63,10 @@ class TagsController extends Controller
      * @param  \App\Tag  $tag
      * @return \Illuminate\Http\Response
      */
-    public function edit(Tag $tag)
+    public function edit($id)
     {
-        //
+        $tag = Tag::find($id);
+        return view('admin.tags.edit')->withTag($tag);
     }
 
     /**
@@ -70,9 +76,13 @@ class TagsController extends Controller
      * @param  \App\Tag  $tag
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Tag $tag)
+    public function update(Request $request, $id)
     {
-        //
+        $tag = Tag::find($id);
+        $tag->name = $request->input('name');
+        $tag->save();
+        return redirect(route('tags.index'))->with('message', 'An tag has been updated');
+  
     }
 
     /**
@@ -81,8 +91,10 @@ class TagsController extends Controller
      * @param  \App\Tag  $tag
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Tag $tag)
+    public function destroy($id)
     {
-        //
+        Tag::find($id)->delete();
+        return redirect(route('tags.index'))->with('message', 'An tag has been deleted');
+   
     }
 }

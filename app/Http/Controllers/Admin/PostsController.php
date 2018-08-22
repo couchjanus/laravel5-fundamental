@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePostRequest;
 use Validator;
 use App\Post;
+use App\Category;
+use App\Tag;
 
 class PostsController extends Controller
 {
@@ -17,12 +19,9 @@ class PostsController extends Controller
      */
     public function index()
     {
-        // $posts = Post::all();
-        $posts = Post::paginate(10);
-
+        $posts = Post::orderBy('id', 'desc')->paginate(10);
         return view('admin.posts.index')
             ->with('posts', $posts);
-
     }
 
     /**
@@ -33,9 +32,10 @@ class PostsController extends Controller
     public function create()
     {   
         $categories = \App\Category::all();
-
+        $tags = Tag::all();
         return view('admin.posts.create')
-         ->with('categories', $categories);
+            ->with('categories', $categories)
+            ->withTags($tags);
     }
 
     /**
@@ -44,67 +44,14 @@ class PostsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    // public function store(Request $request)
-    // {
-    //     $this->validate($request, [
-    //         'title' => 'required|unique|max:255',
-    //         'content' => 'required',
-    //     ]);
-
-    //     //
-    // }
-
-    /**
-     * Сохранить пост в блоге.
-     *
-     * @param  Request  $request
-     * @return Response
-     */
-    // public function store(Request $request)
-    // {
-    //     $validator = Validator::make($request->all(), [
-    //         'title' => 'required|unique|max:255',
-    //         'content' => 'required',
-    //     ]);
-        
-
-    //     if ($validator->fails())
-    //     {
-    //         return redirect()->back()->withErrors($v->errors());
-    //     }
-            // $post = new Post;
-            // $post->title = $request->title;
-            // $post->content = $request->content;
-            // $post->category_id = $request->category_id;
-
-            // $post->save();
-            
-            // return redirect(route('posts.index'))->with('message','An article has been added');
-
-    // }
-
-    /**
-     * Сохранить пост в блоге.
-     *
-     * @param  StorePostRequest  $request
-     * @return Response
-     */
     public function store(StorePostRequest $request)
     {
-        // Валидация успешно пройдена
-
-        // $post = new Post;
-        // $post->title = $request->title;
-        // $post->content = $request->content;
-        // $post->category_id = $request->category_id;
-        // $post->is_active = $request->is_active;
-        
         $post = $request->all();
         $post = new Post($post);
         $post->save();
-        
-        return redirect(route('posts.index'))->with('message', 'An article has been added');
-
+        $post->tags()->sync($request->tags, false);
+        return redirect(route('posts.index'))
+            ->with('message', 'An article has been added');
     }
 
     /**
@@ -114,12 +61,10 @@ class PostsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id)
-
     {
         $post = Post::find($id);
         $data = ['post' => $post];
-        return view('admin.posts.show',$data);
-
+        return view('admin.posts.show', $data);
     }
 
     /**
@@ -130,10 +75,15 @@ class PostsController extends Controller
      */
     public function edit($id)
     {
-       $post = Post::find($id);
-       $categories = \App\Category::pluck('name', 'id');
-       $data = ['post' => $post, 'categories' => $categories];
-       return view('admin.posts.edit', $data);
+        $post = Post::find($id);
+        $categories = \App\Category::pluck('name', 'id');
+        // $tags = Tag::pluck('name', 'id');
+        $tags = Tag::all();
+        return view('admin.posts.edit')
+            ->withPost($post)
+            ->withCategories($categories)
+            ->withTags($tags);
+        
     }
 
     /**
@@ -145,28 +95,23 @@ class PostsController extends Controller
      */
     public function update(Request $request, $id)
     {
-
-        $validator = Validator::make(
-            $request->all(),
-            [
-                'title' => 'required|max:255',
-                'content' => 'required',
-            ]
-        );
-
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($v->errors());
-        }
-    
         $post = Post::find($id);
         $post->title = $request->title;
         $post->content = $request->content;
         $post->category_id = $request->category_id;
         $post->is_active = $request->is_active;
-        // dd($post);
+        
         $post->save();
         
-        return redirect(route('posts.index'))->with('message', 'An article has been updated');
+        if (isset($request->tags)) {
+            $post->tags()->sync($request->tags);
+        } else {
+            $post->tags()->sync(array());
+        }
+
+        return redirect(route('posts.index'))
+            ->with('message', 'An article has been updated');
+    
     }
 
     /**
@@ -177,7 +122,11 @@ class PostsController extends Controller
      */
     public function destroy($id)
     {
-        Post::find($id)->delete();
-        return redirect(route('posts.index'))->with('message','An article has been deleted');
+        $post = Post::find($id);
+        $post->tags()->detach();
+        $post->delete();
+
+        return redirect(route('posts.index'))
+            ->with('message', 'An article has been deleted');
     }
 }
