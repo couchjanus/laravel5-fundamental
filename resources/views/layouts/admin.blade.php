@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.base')
     
     @section('styles')
         <!-- Custom styles for this template -->
