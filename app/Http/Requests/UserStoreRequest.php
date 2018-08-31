@@ -25,12 +25,11 @@ class UserStoreRequest extends FormRequest
     {
         return [
             'name'                  => 'required|max:255|unique:users',
-            // 'first_name'            => '',
-            // 'last_name'             => '',
+            'first_name'            => '',
+            'last_name'             => '',
             'email'                 => 'required|email|max:255|unique:users',
-            'password'              => 'required|min:6|max:20',
-            // 'password'              => 'required|min:6|max:20|confirmed',
-            // 'password_confirmation' => 'required|same:password',
+            'password'              => 'required|min:6|max:20|confirmed',
+            'password_confirmation' => 'required|same:password',
         ];
     }
 }

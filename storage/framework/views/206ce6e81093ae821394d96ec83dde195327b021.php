@@ -87,7 +87,7 @@
                                 <p class="text-center mb-4">
                                     Or Use Social Logins to Register
                                 </p>
-                              
+                                <?php echo $__env->make('shared.socials-icons', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>  
                             </div>
                         </div>
 

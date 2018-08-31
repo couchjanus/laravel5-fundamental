@@ -10,10 +10,6 @@
     <?php $__env->startSection('navigation'); ?>
        <?php echo $__env->make('shared.navigation', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
     <?php $__env->stopSection(); ?>
-    <?php $__env->startSection('jumbotron'); ?>
-       <?php echo $__env->make('shared.jumbotron', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
-    <?php $__env->stopSection(); ?>
-    
     
     
     
@@ -21,7 +17,6 @@
       <main role="main" class="container">
         <div class="row">
           <?php echo $__env->yieldContent('content'); ?>
-          <?php echo $__env->yieldContent('sidebar'); ?>
         </div><!-- /.row -->
       </main>
     <?php $__env->stopSection(); ?>

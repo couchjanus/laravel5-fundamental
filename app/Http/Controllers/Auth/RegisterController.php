@@ -81,8 +81,7 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
-            'first_name'       => $data['first_name'],
-            'last_name'        => $data['last_name'],
+            
             ]
         );
 
@@ -102,6 +101,6 @@ class RegisterController extends Controller
     {
         $this->guard()->logout();
 
-        return redirect('/login')->withInfo('Please verify your account');
+        return redirect('/login')->withMessage('Please verify your account');
     }
 }

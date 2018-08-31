@@ -11,6 +11,10 @@
     @section('navigation')
        @include('shared.navigation')
     @endsection
+    @section('jumbotron')
+       @include('shared.jumbotron')
+    @endsection
+    
     
     {{--Page--}}
     

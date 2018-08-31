@@ -42,7 +42,7 @@
         
         @yield('navigation')        
         <!-- Page Content -->
-        
+        @yield('jumbotron') 
         <div class="container">
             @yield('page')
         </div>

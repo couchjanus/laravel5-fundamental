@@ -10,6 +10,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 class ContactEmail extends Mailable
 {
     use Queueable, SerializesModels;
+    public $contact;
 
     /**
      * Create a new message instance.
@@ -31,15 +32,7 @@ class ContactEmail extends Mailable
         return $this
             ->to(config('mail.support.address'))
             ->subject('Janus Nic Inquiry')
-            ->markdown('emails.contact')
-            ->with(
-                [
-                'contactName'=>$this->contact,
-                // 'contactName'=>$this->contact['name'],
-                // 'contactMessage'=>$this->contact['msg'],
-                // 'contactEmail'=>$this->contact['email'],
-                ]
-            );
+            ->markdown('emails.contact');
         // return $this->markdown('emails.contact');
     }
 }

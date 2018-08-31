@@ -9,7 +9,7 @@ use App\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 use Illuminate\Support\Facades\Input;
-
+use Creativeorange\Gravatar\Facades\Gravatar;
 
 use Validator;
 use View;
@@ -78,6 +78,7 @@ class ProfileController extends Controller
             
         $data = [
             'user'         => $user,
+            'gravatar' => Gravatar::fallback('https://www.gravatar.com/avatar/00000000000000000000000000000000')->get('email@example.com')
         ];
     
         return view('profiles.show')->with($data);

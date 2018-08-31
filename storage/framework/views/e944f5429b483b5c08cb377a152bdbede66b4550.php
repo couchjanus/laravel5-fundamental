@@ -42,7 +42,7 @@
         
         <?php echo $__env->yieldContent('navigation'); ?>        
         <!-- Page Content -->
-        
+        <?php echo $__env->yieldContent('jumbotron'); ?> 
         <div class="container">
             <?php echo $__env->yieldContent('page'); ?>
         </div>

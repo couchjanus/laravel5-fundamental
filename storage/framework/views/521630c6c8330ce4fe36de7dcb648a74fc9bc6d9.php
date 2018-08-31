@@ -2,6 +2,7 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-10">
+            <?php echo $__env->make('partials._messages', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
             <div class="card">
                 <div class="card-header"><?php echo e(__('Login')); ?></div>
 
@@ -62,9 +63,14 @@
                             </div>
                         </div>
 
-                        <p class="text-center mb-3">
-                            Or Login with
-                        </p>
+                        <div class="row">
+                                <div class="col-12 col-lg-10 offset-lg-1 col-xl-8 offset-xl-2">
+                                    <p class="text-center mb-4">
+                                        Or Use Social Logins to Register
+                                    </p>
+                                    <?php echo $__env->make('shared.socials-icons', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>  
+                                </div>
+                        </div>
 
                         
 

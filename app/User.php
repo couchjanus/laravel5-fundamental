@@ -6,6 +6,8 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+use App\VerificationToken;
+
 class User extends Authenticatable
 {
     use Notifiable;
@@ -17,11 +19,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
-    ];
-
-    protected $dates = [
-        'deleted_at',
+        'name', 'email', 'password', 'verified'
     ];
 
     /**
@@ -31,6 +29,9 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password', 'remember_token',
+    ];
+    protected $dates = [
+        'deleted_at',
     ];
 
     /**
@@ -42,6 +43,40 @@ class User extends Authenticatable
     {
         return $this->hasOne('App\Profile');
     }
+
+    /**
+     * User Profile Setup - 
+     * SHould move these to a trait or interface
+     * 
+     * @var array
+    */
+    
+    // public function profiles()
+    // {
+    //     return $this->belongsToMany('App\Profile')->withTimestamps();
+    // }
+
+    // public function hasProfile($name)
+    // {
+    //     foreach ($this->profiles as $profile) {
+    //         if ($profile->name == $name) {
+    //             return true;
+    //         }
+    //     }
+
+    //     return false;
+
+    // }
+
+    // public function assignProfile($profile)
+    // {
+    //     return $this->profiles()->attach($profile);
+    // }
+
+    // public function removeProfile($profile)
+    // {
+    //     return $this->profiles()->detach($profile);
+    // }
 
     public function verificationToken()
     {
@@ -56,6 +91,16 @@ class User extends Authenticatable
     public static function byEmail($email)
     {
         return static::where('email', $email);
+    }
+
+    /**
+     * Build Social Relationships.
+     *
+     * @var array
+     */
+    public function social()
+    {
+        return $this->hasMany('App\Social');
     }
 
 }

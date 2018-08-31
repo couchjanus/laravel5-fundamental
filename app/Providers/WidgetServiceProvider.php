@@ -40,5 +40,6 @@ class WidgetServiceProvider extends ServiceProvider
                 return new \App\Widgets\Widget();
             }
         );
+
     }
 }
