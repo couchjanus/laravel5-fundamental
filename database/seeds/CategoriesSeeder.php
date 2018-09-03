@@ -9,12 +9,6 @@ class CategoriesSeeder extends Seeder
      *
      * @return void
      */
-    // public function run()
-    // {
-    //     DB::table('categories')->insert([
-    //         'name' => str_random(100)
-    //         ]);
-    // }
 
     public function run()
     {
@@ -27,6 +21,7 @@ class CategoriesSeeder extends Seeder
 
         // Удаляем предыдущие данные
         DB::table('categories')->delete();
+        DB::table('post_tag')->delete();
         DB::table('posts')->delete();
         
         foreach ($categoriesData as $cat) {

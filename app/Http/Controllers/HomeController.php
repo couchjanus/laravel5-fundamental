@@ -25,7 +25,12 @@ class HomeController extends Controller
     public function index()
     {
         // $gravatar = Gravatar::get('couchjanus@gmai.com');
+
         $gravatar = Gravatar::fallback('https://www.gravatar.com/avatar/00000000000000000000000000000000')->get('email@example.com');
+
+        if (Gate::allows('is-admin')) {
+                return view('admin.index')->withGravatar($gravatar);
+        }
 
         return view('profiles.home')->withGravatar($gravatar);
     }

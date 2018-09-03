@@ -60,7 +60,8 @@ class UsersController extends Controller
      */
     public function create()
     {
-        return view('admin.users.create');
+        $roles = Role::get()->pluck('name', 'id');
+        return view('admin.users.create')->withRoles($roles);;
     }
 
     /**
@@ -111,7 +112,8 @@ class UsersController extends Controller
     public function edit($id)
     {
         $user = User::findOrFail($id);
-        return view('admin.users.edit')->withUser($user);
+        $roles = Role::get()->pluck('name', 'id');
+        return view('admin.users.edit')->withUser($user)->withRoles($roles);
     }
 
     /**
@@ -128,6 +130,7 @@ class UsersController extends Controller
         $user = User::find($id);
         $user = $request->all();
         $user->save();
+        $user->roles()->sync($request->roles);
         return back()->with('message', 'User has been updated successfully');
     }
 
