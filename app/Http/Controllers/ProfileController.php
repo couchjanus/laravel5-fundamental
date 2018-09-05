@@ -4,12 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Profile;
+use App\Theme;
 use App\User;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 use Illuminate\Support\Facades\Input;
-use Creativeorange\Gravatar\Facades\Gravatar;
+
 
 use Validator;
 use View;
@@ -28,17 +29,16 @@ class ProfileController extends Controller
     }
     
     /**
-     * Get a validator for an incoming registration request.
-     *
-     * @param array $data
-     *
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
+    * Get a validator for an incoming registration request.
+    *
+    * @param array $data
+    *
+    * @return \Illuminate\Contracts\Validation\Validator
+    */
     public function profile_validator(array $data)
     {
             return Validator::make($data, [
-                'first_name'         => '',
-                'last_name'         => '',
+                'theme_id'         => '',
                 'location'         => '',
                 'bio'              => 'max:500',
                 'twitter_username' => 'max:50',
@@ -75,10 +75,12 @@ class ProfileController extends Controller
         } catch (ModelNotFoundException $exception) {
             abort(404);
         }
-            
+    
+        $currentTheme = Theme::find($user->profile->theme_id);
+    
         $data = [
             'user'         => $user,
-            'gravatar' => Gravatar::fallback('https://www.gravatar.com/avatar/00000000000000000000000000000000')->get('email@example.com')
+            'currentTheme' => $currentTheme,
         ];
     
         return view('profiles.show')->with($data);
@@ -101,28 +103,36 @@ class ProfileController extends Controller
                 ->with('error_title', 'This is not Your Profile');
         }
     
+        $themes = Theme::where('status', 1)
+                        ->orderBy('name', 'asc')
+                        ->get();
+    
+        $currentTheme = Theme::find($user->profile->theme_id);
     
         $data = [
             'user'         => $user,
+            'themes'       => $themes,
+            'currentTheme' => $currentTheme,
+    
         ];
     
         return view('profiles.edit')->with($data);
     }
     
     /**
-     * Update a user's profile.
-     *
-     * @param $username
-     *
-     * @throws Laracasts\Validation\FormValidationException
-     *
-     * @return mixed
-     */
+    * Update a user's profile.
+    *
+    * @param $username
+    *
+    * @throws Laracasts\Validation\FormValidationException
+    *
+    * @return mixed
+    */
     public function update($username, Request $request)
     {
         $user = $this->getUserByUsername($username);
     
-        $input = Input::only('first_name', 'last_name', 'location', 'bio', 'twitter_username', 'github_username', 'avatar_status');
+        $input = Input::only('theme_id', 'location', 'bio', 'twitter_username', 'github_username', 'avatar_status');
                 
         $profile_validator = $this->profile_validator($request->all());
     
@@ -143,30 +153,28 @@ class ProfileController extends Controller
     }
     
     /**
-     * Get a validator for an incoming update user request.
-     *
-     * @param array $data
-     *
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
+    * Get a validator for an incoming update user request.
+    *
+    * @param array $data
+    *
+    * @return \Illuminate\Contracts\Validation\Validator
+    */
     public function validator(array $data)
     {
-        return Validator::make(
-            $data, 
-            [
-                'name' => 'required|max:255',
+        return Validator::make($data, [
+           'name' => 'required|max:255',
             ]
         );
     }
     
     /**
-     * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param int                      $id
-     *
-     * @return \Illuminate\Http\Response
-     */
+    * Update the specified resource in storage.
+    *
+    * @param \Illuminate\Http\Request $request
+    * @param int                      $id
+    *
+    * @return \Illuminate\Http\Response
+    */
     public function updateUserAccount(Request $request, $id)
     {
         $currentUser = \Auth::user();
@@ -193,8 +201,8 @@ class ProfileController extends Controller
         }
     
         $user->name = $request->input('name');
-        // $user->first_name = $request->input('first_name');
-        // $user->last_name = $request->input('last_name');
+        $user->first_name = $request->input('first_name');
+        $user->last_name = $request->input('last_name');
     
         if ($emailCheck) {
             $user->email = $request->input('email');
@@ -245,13 +253,13 @@ class ProfileController extends Controller
     
     
     /**
-     * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param int                      $id
-     *
-     * @return \Illuminate\Http\Response
-     */
+    * Update the specified resource in storage.
+    *
+    * @param \Illuminate\Http\Request $request
+    * @param int                      $id
+    *
+    * @return \Illuminate\Http\Response
+    */
     public function deleteUserAccount(Request $request, $id)
     {
     

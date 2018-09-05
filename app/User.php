@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 use App\VerificationToken;
 
+use Hash;
+use Cache;
+
 class User extends Authenticatable
 {
     use Notifiable;
@@ -19,7 +22,8 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'verified'
+        'name', 'email', 'password','first_name',
+        'last_name', 'verified'
     ];
 
     /**
@@ -51,32 +55,32 @@ class User extends Authenticatable
      * @var array
     */
     
-    // public function profiles()
-    // {
-    //     return $this->belongsToMany('App\Profile')->withTimestamps();
-    // }
+    public function profiles()
+    {
+        return $this->belongsToMany('App\Profile')->withTimestamps();
+    }
 
-    // public function hasProfile($name)
-    // {
-    //     foreach ($this->profiles as $profile) {
-    //         if ($profile->name == $name) {
-    //             return true;
-    //         }
-    //     }
+    public function hasProfile($name)
+    {
+        foreach ($this->profiles as $profile) {
+            if ($profile->name == $name) {
+                return true;
+            }
+        }
 
-    //     return false;
+        return false;
 
-    // }
+    }
 
-    // public function assignProfile($profile)
-    // {
-    //     return $this->profiles()->attach($profile);
-    // }
+    public function assignProfile($profile)
+    {
+        return $this->profiles()->attach($profile);
+    }
 
-    // public function removeProfile($profile)
-    // {
-    //     return $this->profiles()->detach($profile);
-    // }
+    public function removeProfile($profile)
+    {
+        return $this->profiles()->detach($profile);
+    }
 
     public function verificationToken()
     {
@@ -115,4 +119,42 @@ class User extends Authenticatable
         return $this->belongsToMany(Role::class, 'role_user');
     }
 
+    public function permissions()
+    {
+        return $this->hasManyThrough('App\Permission', 'App\Role');
+    }
+
+    /**
+    * Checks a Permission
+    */
+
+    public function isSuperVisor()
+    {
+        if ($this->roles->contains('slug', 'admin')) {
+            return true;
+        }
+
+        return false;
+    }
+
+
+    public function hasRole($role)
+    {
+        if ($this->isSuperVisor()) {
+            return true;
+        }
+
+        if (is_string($role)) {
+            return $this->role->contains('slug', $role);
+        }
+
+        return !! $this->roles->intersect($role)->count();
+    }
+
+    public function isOnline()
+    {
+        return Cache::has('user-is-online-' . $this->id);
+    }
+
 }
+

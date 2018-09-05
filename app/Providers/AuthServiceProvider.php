@@ -7,6 +7,7 @@ use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvid
 
 use App\Post;
 use App\Policies\PostPolicy;
+use App\Permission;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -30,7 +31,7 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         Gate::define(
-            'update-post',
+            'update-post', 
             function ($user, $post) {
                 return $user->id == $post->user_id;
             }
@@ -45,14 +46,19 @@ class AuthServiceProvider extends ServiceProvider
                 }
             }
         );
-
-        Gate::define(
-            'add-post', function ($user) {
-                foreach ($user->roles as $role) {
-                    if ($role->name == 'admin') return true; 
-                }
-                return false;
-            }
-        );
+        
+        // foreach ($this->getPermissions() as $permission) {
+        //     Gate::define(
+        //         $permission->slug, 
+        //         function ($user) use ($permission) {
+        //             return $user->hasRole($permission->roles);
+        //         }
+        //     );
+        // }
+    }
+    
+    private function getPermissions()
+    {
+        return Permission::all();
     }
 }

@@ -13,6 +13,8 @@ class UserUpdateRequest extends FormRequest
      */
     public function authorize()
     {
+        // $postId = $this->route('post');
+        // return Gate::allows('update', Post::findOrFail($postId));
         return true;
     }
 
@@ -30,3 +32,5 @@ class UserUpdateRequest extends FormRequest
         ];
     }
 }
+
+

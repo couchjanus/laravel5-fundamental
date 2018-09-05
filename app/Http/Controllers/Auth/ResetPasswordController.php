@@ -48,9 +48,9 @@ class ResetPasswordController extends Controller
      */
     protected function sendResetResponse($response)
     {
-        if (!$this->guard()->user()->hasVerifiedEmail()) {
+        if(!$this->guard()->user()->hasVerifiedEmail()) {
             $this->guard()->logout();
-            return redirect('/login')->withMessage('Password changed successfully. Please verify your email');
+            return redirect('/login')->withInfo('Password changed successfully. Please verify your email');
         }
         return redirect($this->redirectPath())
                             ->with('status', $response);

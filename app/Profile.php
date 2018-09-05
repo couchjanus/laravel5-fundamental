@@ -14,8 +14,7 @@ class Profile extends Model
      */
 
     protected $fillable = [
-        'first_name',
-        'last_name',
+        'theme_id',
         'location',
         'bio',
         'twitter_username',
@@ -25,8 +24,8 @@ class Profile extends Model
         'avatar_status',
     ];
 
-    protected $guarded = [
-        'id',
+    protected $casts = [
+        'theme_id' => 'integer',
     ];
 
     /**
@@ -44,8 +43,8 @@ class Profile extends Model
      *
      * @var array
      */
-    // public function theme()
-    // {
-    //     return $this->hasOne('App\Theme');
-    // }
+    public function theme()
+    {
+        return $this->hasOne('App\Theme');
+    }
 }

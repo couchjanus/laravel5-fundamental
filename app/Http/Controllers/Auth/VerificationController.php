@@ -6,29 +6,31 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 use App\{User, VerificationToken};
+
 use Auth;
+
 use App\Events\UserRequestedVerificationEmail;
 
 class VerificationController extends Controller
 {
     public function verify(VerificationToken $token)
     {
-        $token->user()->update(
-            [
-                'verified' => true
-            ]
-        );
-        $token->delete();
+    	$token->user()->update([
+    		'verified' => true
+    	]);
 
-        // Auth::login($token->user);
-        return redirect('/login')->withInfo('Email verification succesful. Please login again');
+    	$token->delete();
+
+    	//Auth::login($token->user);
+
+    	return redirect('/login')->withInfo('Email verification succesful. Please login again');
     }
 
     public function resend(Request $request)
     {
-        $user = User::byEmail($request->email)->firstOrFail();
+    	$user = User::byEmail($request->email)->firstOrFail();
 
-        if ($user->hasVerifiedEmail()) {
+        if($user->hasVerifiedEmail()) {
             return redirect('/home')->withInfo('Your email has already been verified');
         }
 

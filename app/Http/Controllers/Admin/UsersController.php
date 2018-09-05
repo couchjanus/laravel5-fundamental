@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
+
 use App\Profile;
 use App\User;
+use App\Role;
 use Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
+
 
 class UsersController extends Controller
 {
@@ -46,12 +49,12 @@ class UsersController extends Controller
     
     public function restore($id)
     {
+        
         User::withTrashed()
             ->where('id', $id)
             ->restore();
 
-        return redirect(route('users.trashed'))
-            ->with('message', 'An user has been restored successfully');
+        return redirect(route('users.trashed'))->with('message', 'An user has been restored successfully');
     }
     /**
      * Show the form for creating a new resource.
@@ -73,20 +76,21 @@ class UsersController extends Controller
      */
     public function store(UserStoreRequest $request)
     {
-        $user = User::create(
-            [
-                'name'             => $request->input('name'),
-                'email'            => $request->input('email'),
-                'password'         => bcrypt($request->input('password')),
-            ]
-        );
+
+        $user = User::create([
+            'name'             => $request->input('name'),
+            'email'            => $request->input('email'),
+            'password'         => bcrypt($request->input('password')),
+        ]);
+
+        $user->roles()->sync($request->input('role_list'), false);
 
         $profile = new Profile();
         $user->profile()->save($profile);
         
         $user->save();
-        return redirect(route('users.index'))
-            ->with('message', 'An user has been created successfully');
+        
+        return redirect(route('users.index'))->with('message', 'An user has been created successfully');
     }
 
     /**
@@ -112,7 +116,9 @@ class UsersController extends Controller
     public function edit($id)
     {
         $user = User::findOrFail($id);
+
         $roles = Role::get()->pluck('name', 'id');
+        
         return view('admin.users.edit')->withUser($user)->withRoles($roles);
     }
 
@@ -124,14 +130,12 @@ class UsersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function update(UserUpdateRequest $request, $id)
+    public function update(Request $request, $id)
     {
-        $currentUser = Auth::user();
-        $user = User::find($id);
-        $user = $request->all();
-        $user->save();
-        $user->roles()->sync($request->roles);
-        return back()->with('message', 'User has been updated successfully');
+        $user = User::findOrFail($id);
+        $user->update($request->all());
+        $user->roles()->sync($request->input('role_list'));
+        return redirect(route('users.index'))->with('message', 'User has been updated successfully');
     }
 
     /**

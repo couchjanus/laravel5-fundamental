@@ -48,20 +48,15 @@ Route::resource('tags', 'Admin\TagsController');
 
 Route::resource('users', 'Admin\UsersController');
 
+Route::resource('roles', 'Admin\RolesController');
+Route::resource('permissions', 'Admin\PermissionsController');
+
 Route::get('/trashed', 'Admin\UsersController@indexTrashed')->name('users.trashed');
 Route::post('/restore/{id}', 'Admin\UsersController@restore')->name('users.restore');
 
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
-
-
-// Route::get('profile/{username}', [
-//     'as'   => '{username}',
-//     'uses' => 'ProfileController@show',
-//     ]
-// );
-
 
 Route::group(
     [

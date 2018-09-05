@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
 use App\Tag;
 
 class TagsController extends Controller
@@ -16,7 +15,7 @@ class TagsController extends Controller
      */
     public function index()
     {
-        $tags = Tag::paginate(10);
+         $tags = Tag::all();
 
         return view('admin.tags.index')
             ->with('tags', $tags);
@@ -49,10 +48,10 @@ class TagsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Tag  $tag
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Tag $tag)
+    public function show($id)
     {
         //
     }
@@ -60,7 +59,7 @@ class TagsController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Tag  $tag
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -73,7 +72,7 @@ class TagsController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Tag  $tag
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -82,19 +81,17 @@ class TagsController extends Controller
         $tag->name = $request->input('name');
         $tag->save();
         return redirect(route('tags.index'))->with('message', 'An tag has been updated');
-  
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Tag  $tag
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        Tag::find($id)->delete();
+        Yag::find($id)->delete();
         return redirect(route('tags.index'))->with('message', 'An tag has been deleted');
-   
     }
 }

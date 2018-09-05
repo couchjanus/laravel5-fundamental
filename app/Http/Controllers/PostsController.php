@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use DB;
 use App\Post;
+use App\Category;
+use Gate;
+use Auth;
 
 class PostsController extends Controller
 {
@@ -13,17 +15,11 @@ class PostsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    
     public function index()
     {
-        $posts = \App\Post::paginate(5);
-        // var_dump($posts);
-        return view('blog.index', ['posts' => $posts]);
-    }
-
-    public function list()
-    {
-
-        $posts = \App\Post::paginate(5);
+        
+        $posts = Post::paginate(3);
 
         $response = [
             'pagination' => [
@@ -38,7 +34,6 @@ class PostsController extends Controller
         ];
 
         return response()->json($response);
-
     }
 
     /**
@@ -49,24 +44,13 @@ class PostsController extends Controller
      */
     public function show($id)
     {
-        $post = DB::select("select * from posts where id = :id", ['id' => $id]);
-
-        return view('blog.show', ['post' => $post, 'hescomment' => true ]);
-
+        $post =  \App\Post::findOrFail($id);
+        return view('blog.show', ['post' => $post, 'hescomment' => true]);
     }
 
     // PostsController, метод showBySlug:
     public function showBySlug($slug) 
     {
-        /** 
-         * Вначале мы проверяем, не является ли слаг числом. 
-         * Часто слаги внедряют в программу уже после того, 
-         * как был другой механизм построения пути. 
-         * Например, через числовые индексы. 
-         * Тогда может получится ситуация, что пользователь, 
-         * зайдя на сайт по старой ссылке, увидит 404 ошибку, 
-         * что такой страницы не существует. 
-        */
         if (is_numeric($slug)) {
             // Get post for slug.
             $post = Post::findOrFail($slug);
@@ -75,37 +59,129 @@ class PostsController extends Controller
             // 301 редирект со старой страницы, на новую.    
         }
         // Get post for slug.
-        $post = Post::whereSlug($slug)->firstOrFail();
 
+        $post = Post::whereSlug($slug)->firstOrFail();
+   
+        $this->breadcrumbs
+            ->addCrumb('Blog', 'blog')
+            ->addCrumb($post->title, "");
+   
         return view('blog.show', [
             'post' => $post,
-            'hescomment' => true
+            'hescomment' => true,
+            'breadcrumbs' => $this->breadcrumbs 
             ]
         );
     }
 
     public function getById($id)
     {
-        // Получить конкретные записи с помощью find или first. 
-        // Вместо коллекции моделей эти методы возвращают один экземпляр модели:
+        return \App\Post::findOrFail($id);
+    }
 
-        // Получение модели по её первичному ключу...
+    public function getPosts()
+    {
+        $posts = \App\Post::where('user_id', '=', Auth::id())->get();
 
-        return  \App\Post::find($id);
+        return view('blog.postlist', [
+            'posts' => $posts,
+            ]
+        );
 
+    }
+
+    public function showPost($id)
+    {
+        
+        
         // return \App\Post::findOrFail($id);
+    }
 
-        // return App\Post::where('id', '>', $id)->firstOrFail();
+    public function destroyPost($id)
+    {   
+        $user = Auth::user();
+        $post = \App\Post::findOrFail($id);
+        if (Gate::forUser($user)->allows('destroy-post', $post)) {
+            // Пользователь может удалять статью...
+            dd('Пользователь '.$user->name.' может удалять статью...');
+        }
+          
+        if (Gate::forUser($user)->denies('destroy-post', $post)) {
+            // Пользователь не может удалять статью...
+            dd('Пользователь '.$user->name.' не может удалять статью...');
+        }
 
+        if ($user->can('destroy', $post)) {
+            //
+        }
+          
+        if ($user->cannot('destroy', $post)) {
+            //
+        }
+          
+          
+    }
+
+    public function editPost($id)
+    {
+        $post = \App\Post::findOrFail($id);
+
+        if (Gate::allows('update-post', $post)) {
+            // Текущий пользователь может редактировать статью...
+            return view('blog.edit', [
+                'post' => $post,
+                ]
+            );  
+        }
+        
+
+        if (Gate::denies('update', $post)) {
+            abort(403);
+        }
+
+        if (policy($post)->update($user, $post)) {
+            //
+        }
+          
+
+        if (Gate::denies('update-post', $post)) {
+            // Текущий пользователь не может редактировать статью...
+        }
+    }
+
+    public function update(Request $request, $id)
+    {
+        $post = Post::findOrFail($id);
+
+        if ($request->user()->cannot('update-post', $post)) {
+            abort(403);
+        }
+
+        if ($request->user()->can('update-post', $post)) {
+            // Обновление статьи...
+        }
+
+        $this->authorize('update', $post);
+  
+        // Обновление статьи...
+        // $this->authorizeForUser($user, 'update', $post);  
+        
+        // $this->authorize($post);
     }
     
     public function getFirstActive()
     {
-        // Получить конкретные записи с помощью find или first. 
-        // Вместо коллекции моделей эти методы возвращают один экземпляр модели:
-        // Получение первой модели, удовлетворяющей условиям...
-
         return \App\Post::where('active', 1)->first();
         
     }
+
+    public function getByIds($ids)
+    {
+        // Также вы можете вызвать метод find с массивом первичных ключей,
+        // который вернёт коллекцию подходящих записей:
+
+        return \App\Post::find([1, 2, 3]);
+
+    }
+
 }

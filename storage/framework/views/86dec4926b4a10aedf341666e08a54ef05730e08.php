@@ -3,33 +3,65 @@
   <div class="animate fadeIn">
     <div class="col-md-12">
       <div class="panel panel-default">
-        <?php echo $__env->make('partials.admin._messages', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
-      <div class="panel-heading">Users <a href="<?php echo e(url('/users/create')); ?>" class="btn btn-success btn-sm float-right" title="Add New User">
-        <span data-feather="plus"></span> Add New
-      </a> <a href="<?php echo e(route('users.trashed')); ?>" class="btn btn-warning btn-sm float-right" title="Trashed Users">
-        <span data-feather="delete"></span> Trashed List
-      </a></div>
-
+      <div class="panel-heading">Users</div>
         <div class="panel-body">
-            
+          <a href="<?php echo e(url('/users/create')); ?>" class="btn btn-success btn-sm" title="Add New User">
+              <i class="fa fa-plus" aria-hidden="true"></i> Add New
+          </a>
+          <a href="<?php echo e(route('users.trashed')); ?>" class="btn btn-success btn-sm" title="All Posts">
+                  <i class="fa fa-arrow-right" aria-hidden="true"></i> Trashed List
+          </a>
+          <br/>
+            <?php if(Session::get('message') != Null): ?>
+              <div class="row">
+                  <div class="col-md-9">
+                      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                          </button>
+                          <?php echo e(Session::get('message')); ?>
+
+                      </div>
+                  </div>
+              </div>
+            <?php endif; ?>
+
+
+            <br/>
             <div class="table-responsive">
-              <table class="table table-hover table-striped table-sm">
+                  
+              <table class="table table-hover">
                 <thead>
                   <tr>
                     <th>#</th>
+                    <th>Online</th>
                     <th>Username</th>
                     <th>Email</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
                     <th>Action</th>
                   </tr>
                 </thead>
+
                 <tbody>
                     <?php $__currentLoopData = $users; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $user): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <tr>
                         <td><?php echo e($user->id); ?></td>
+                        <td>
+                            <?php if($user->isOnline()): ?>
+                                <span style="color:green">Online</span>
+                            <?php else: ?>
+                                <span style="color:red">Offline</span>
+                            <?php endif; ?>
+                        </td>
                         <td><?php echo e($user->name); ?></td>
                         <td><?php echo e($user->email); ?></td>
+                        <td><?php echo e($user->first_name); ?></td>
+                        <td><?php echo e($user->last_name); ?></td>
                         <td>
-                            <a title="View" href="<?php echo e(route('users.show', ['id'=> $user->id])); ?>" class="btn btn-primary"><span data-feather="eye"></span></a>&nbsp;<a title="Edit user" href="<?php echo e(route('users.edit', ['id'=> $user->id])); ?>" class="btn btn-warning"><span data-feather="edit"></span></a>&nbsp;<button title="Delete user" type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete_user_<?php echo e($user->id); ?>"><span data-feather="delete"></span></button>
+                            <a title="Show User" href="<?php echo e(route('users.show', ['id'=> $user->id])); ?>" class="btn btn-primary"><span class="fa fa-newspaper-o"></span></a>
+                            <a title="Edit article" href="<?php echo e(route('users.edit', ['id'=> $user->id])); ?>" class="btn btn-warning"><span class="fa fa-edit"></span></a>
+                            <button title="Delete user" type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete_user_<?php echo e($user->id); ?>"><span class="fa fa-trash-o"></span></button>
                         </td>
                     </tr>
 
@@ -48,7 +80,7 @@
                                 </div>
 
                                 <div class="modal-body">
-                                Are you sure to delete user: <b><?php echo e($user->name); ?> </b>?
+                                Are you sure to delete user: <b><?php echo e($user->title); ?> </b>?
                                 </div>
                                 <div class="modal-footer">
                                 <a href="<?php echo e(url('/users')); ?>">
@@ -60,8 +92,6 @@
                             </div>
                         </form>
                         </div>
-                  
-                  
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </tbody>
               </table>

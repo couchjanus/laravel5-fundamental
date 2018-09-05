@@ -5,33 +5,64 @@
   <div class="animate fadeIn">
     <div class="col-md-12">
       <div class="panel panel-default">
-        @include('partials.admin._messages')
-      <div class="panel-heading">Users <a href="{{ url('/users/create') }}" class="btn btn-success btn-sm float-right" title="Add New User">
-        <span data-feather="plus"></span> Add New
-      </a> <a href="{{ route('users.trashed') }}" class="btn btn-warning btn-sm float-right" title="Trashed Users">
-        <span data-feather="delete"></span> Trashed List
-      </a></div>
-
+      <div class="panel-heading">Users</div>
         <div class="panel-body">
-            
+          <a href="{{ url('/users/create') }}" class="btn btn-success btn-sm" title="Add New User">
+              <i class="fa fa-plus" aria-hidden="true"></i> Add New
+          </a>
+          <a href="{{ route('users.trashed') }}" class="btn btn-success btn-sm" title="All Posts">
+                  <i class="fa fa-arrow-right" aria-hidden="true"></i> Trashed List
+          </a>
+          <br/>
+            @if (Session::get('message') != Null)
+              <div class="row">
+                  <div class="col-md-9">
+                      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                          </button>
+                          {{ Session::get('message') }}
+                      </div>
+                  </div>
+              </div>
+            @endif
+
+
+            <br/>
             <div class="table-responsive">
-              <table class="table table-hover table-striped table-sm">
+                  
+              <table class="table table-hover">
                 <thead>
                   <tr>
                     <th>#</th>
+                    <th>Online</th>
                     <th>Username</th>
                     <th>Email</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
                     <th>Action</th>
                   </tr>
                 </thead>
+
                 <tbody>
                     @foreach($users as $user)
                     <tr>
                         <td>{{ $user->id }}</td>
+                        <td>
+                            @if($user->isOnline())
+                                <span style="color:green">Online</span>
+                            @else
+                                <span style="color:red">Offline</span>
+                            @endif
+                        </td>
                         <td>{{ $user->name }}</td>
                         <td>{{ $user->email }}</td>
+                        <td>{{$user->first_name}}</td>
+                        <td>{{$user->last_name}}</td>
                         <td>
-                            <a title="View" href="{{ route('users.show', ['id'=> $user->id]) }}" class="btn btn-primary"><span data-feather="eye"></span></a>&nbsp;<a title="Edit user" href="{{ route('users.edit', ['id'=> $user->id]) }}" class="btn btn-warning"><span data-feather="edit"></span></a>&nbsp;<button title="Delete user" type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete_user_{{ $user->id  }}"><span data-feather="delete"></span></button>
+                            <a title="Show User" href="{{ route('users.show', ['id'=> $user->id]) }}" class="btn btn-primary"><span class="fa fa-newspaper-o"></span></a>
+                            <a title="Edit article" href="{{ route('users.edit', ['id'=> $user->id]) }}" class="btn btn-warning"><span class="fa fa-edit"></span></a>
+                            <button title="Delete user" type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete_user_{{ $user->id  }}"><span class="fa fa-trash-o"></span></button>
                         </td>
                     </tr>
 
@@ -50,7 +81,7 @@
                                 </div>
 
                                 <div class="modal-body">
-                                Are you sure to delete user: <b>{{ $user->name }} </b>?
+                                Are you sure to delete user: <b>{{ $user->title }} </b>?
                                 </div>
                                 <div class="modal-footer">
                                 <a href="{{ url('/users') }}">
@@ -62,8 +93,6 @@
                             </div>
                         </form>
                         </div>
-                  
-                  
                     @endforeach
                 </tbody>
               </table>

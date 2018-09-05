@@ -4,7 +4,6 @@ namespace App;
 use Cviebrock\EloquentSluggable\Sluggable;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 use App\Category;
 use App\Tag;
@@ -12,11 +11,6 @@ use App\Tag;
 class Post extends Model
 {
     use Sluggable;
-    use SoftDeletes;
-
-    protected $dates = [
-        'deleted_at',
-    ];
 
     protected $fillable = ['title','category_id','content', 'slug', 'is_active'];
     
@@ -37,6 +31,11 @@ class Post extends Model
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo('App\User');
     }
     
     public function tags()

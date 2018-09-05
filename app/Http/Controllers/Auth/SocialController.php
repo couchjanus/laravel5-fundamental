@@ -62,9 +62,6 @@ class SocialController extends Controller
                 if (count($fullname) == 1) {
                     $fullname[1] = '';
                 }
-                $profile->first_name = $fullname[0];
-                $profile->last_name = $fullname[1];
-
                 $username = $socialUserObject->nickname;
 
                 if ($username == null) {
@@ -76,6 +73,8 @@ class SocialController extends Controller
                 $user = User::create(
                     [
                     'name'                 => $username,
+                    'first_name'           => $fullname[0],
+                    'last_name'            => $fullname[1],
                     'email'                => $email,
                     'password'             => bcrypt(str_random(40)),
                     'verified'             => true,
@@ -107,7 +106,7 @@ class SocialController extends Controller
 
             auth()->login($socialUser, true);
 
-            return redirect('home')->with('info', 'You have successfully registered! ');
+            return redirect('home')->with('success', 'You have successfully registered! ');
         }
 
         $socialUser = $userCheck;
