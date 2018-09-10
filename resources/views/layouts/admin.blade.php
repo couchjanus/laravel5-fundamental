@@ -1,43 +1,50 @@
-@extends('layouts.base')
-    
-    @section('styles')
-        <!-- Custom styles for this template -->
-        <link href="/css/dashboard.css" rel="stylesheet">
-        <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
-    @endsection
-    
-    {{--Head--}}
-    @section('head')
-    @endsection
-    
-    @section('navigation')
-        <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
-            <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">Company name</a>
-            <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
-            <ul class="navbar-nav px-3">
-              <li class="nav-item text-nowrap">
-                <a class="nav-link" href="#">Sign out</a>
-              </li>
-            </ul>
-        </nav>
-    @endsection
-    
-    {{--Page--}}
-    
-    @section('page')
-      <div class="container-fluid">
-        <div class="row">
-          @include('partials.admin.sidebar')
-          <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
-            @yield('content')
-          </main>
-        </div><!-- /.row -->
-      </div>
-    @endsection
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Admin Template">
+  <meta name="author" content="">
+  <meta name="keyword" content="Bootstrap,Admin,Template">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+  <link rel="shortcut icon" href="{{ asset('images/favicon.png') }}">
+  <title>Admin Template</title>
 
-    @section('adminscripts')
-      {{--Scripts--}}
-      @include('partials.admin._scripts')    
-    @endsection
-    
- 
+  <!-- Icons -->
+  <link href="{{ asset('css/font-awesome.min.css') }}" rel="stylesheet">
+  <link href="{{ asset('css/simple-line-icons.css') }}" rel="stylesheet">
+  <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
+  <!-- Main styles for this application -->
+  <link href="{{ asset('css/admin.css') }}" rel="stylesheet">
+  <!-- Styles required by this views -->
+  <link rel="stylesheet" href="{{ asset('css/custom.css') }}">  
+</head>
+
+<body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
+  @include('layouts.partials.navbar')
+  
+  <div class="app-body">
+    @include('layouts.partials.sidebar')
+    <!-- Main content -->
+    <main class="main" id="app">
+
+      <!-- Breadcrumb -->
+      @include('layouts.partials.breadcrumb')
+
+      @yield('content')
+      <!-- /.container-fluid -->
+    </main>
+
+    @include('layouts.partials.asidemenu')
+
+  </div>
+
+  @include('layouts.partials.footer')
+
+  @include('layouts.partials.scripts')
+  
+  @yield('scripts')
+
+</body>
+</html>

@@ -1,7 +1,10 @@
-@extends('layouts.base')
+@extends('layouts.app')
 
     {{--Styles--}}
     @section('styles')
+    <link href="{{ asset('css/font-awesome.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/simple-line-icons.css') }}" rel="stylesheet">
+
     <style>
 
     #wrapper {
@@ -120,24 +123,11 @@
 
     </style>
 @endsection
-@section('navigation')
-       @include('shared.navigation')
-    @endsection
-{{--Page--}}
     
-    @section('page')
-      <main role="main" class="container">
-        <div class="row">
-          @yield('content')
-          @yield('sidebar')
-        </div><!-- /.row -->
-      </main>
-    @endsection
-    
-    
+
 @section('scripts')
-    <script src="/js/jquery.min.js"></script>
-    
+    <script src="/vendor/jquery/jquery.min.js"></script>
+    <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- Menu Toggle Script -->
     <script>
     $("#menu-toggle").click(function(e) {

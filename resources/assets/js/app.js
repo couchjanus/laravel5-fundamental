@@ -15,37 +15,28 @@ window.Vue = require('vue');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('example-component', require('./components/ExampleComponent.vue'));
+// Vue.component('example-component', require('./components/ExampleComponent.vue'));
+
+// const app = new Vue({
+//     el: '#app'
+// });
 
 Vue.component('pagination', require('./components/PaginationComponent.vue'));
+Vue.component('image-component', require('./components/ImageuploadComponent.vue'));
 
 const app = new Vue({
     el: '#app',
+
     data: {
-        items: [],
-        message: 'Hi Vue!',
-        hasError: true,
         posts: {},
         pagination: {
-          'current_page': 1
+            'current_page': 1
         }
     },
-    mounted : function(){
-        this.getVueItems();
-        this.fetchPosts();
-    },
-    created: function () {
-        console.log('Значение message: ' + this.message);  // `this` указывает на экземпляр app
-    },
-    methods : {
-        getVueItems: function(){
-            axios.get('/vue/news').then((response) => {
-                this.items = response.data;
-            });
-        },
-        
-        fetchPosts: function() {
-            axios.get('/vue/posts?page=' + this.pagination.current_page)
+
+    methods: {
+        fetchPosts() {
+            axios.get('blogposts?page=' + this.pagination.current_page)
                 .then(response => {
                     this.posts = response.data.data.data;
                     this.pagination = response.data.pagination;
@@ -54,5 +45,9 @@ const app = new Vue({
                     console.log(error.response.data);
                 });
         }
+    },
+
+    mounted() {
+        this.fetchPosts();
     }
 });

@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('jumbotron')
+    <br>
     <div class="jumbotron">
         <div class="container">
             <h1>Contact Us</h1>
@@ -11,9 +12,11 @@
 @endsection
 
 @section('content')
-<div role="main" class="container">
-    <div class="row">
-        <div class="col-md-4">
+
+    <div class="row" style="margin-top: 25px;">
+
+        <div class="col-md-4 col-sm-12">
+
             <div class="card">
                 <div class="card-body">
                     <div class="card-title map">
@@ -33,7 +36,7 @@
 
         </div>
 
-        <div class="col-md-8">
+        <div class="col-md-8 col-sm-12">
 
             <p>
                 Send us your questions, comments, and suggestions and someone will be in touch within
@@ -67,6 +70,6 @@
         </div>
 
     </div>
-</div>
+
 @endsection
 

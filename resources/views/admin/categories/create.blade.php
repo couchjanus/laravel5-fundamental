@@ -3,13 +3,13 @@
 @section('content')
 <div class="container-fluid">
   <div class="animate fadeIn">
-    <div class="col-md-12">
+    <div class="col-md-9">
       <div class="panel panel-default">
         <div class="panel-heading"><h2>Add New category</h2></div>
           <div class="panel-body">
 
             <a href="{{ route('categories.index') }}" class="btn btn-success btn-sm" title="All categories">
-                <span data-feather="arrow-left"></span>  Go Back
+                <i class="fa fa-arrow-left" aria-hidden="true"></i> Go Back
             </a>
             <br/>
             <br/>
@@ -24,9 +24,10 @@
                         </div>
                     </div>
                     <div class="card-footer text-muted">
-                      <button type="submit" class="btn btn-primary btn-sm pull-right"><span data-feather="save"></span> Save</button>
+                        <div class="pull-right">
+                            <button type="submit" class="btn btn-primary">Save</button>
                     </div>
-                
+                </div>
                 </div>
               </form>
             </div>

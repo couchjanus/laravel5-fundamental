@@ -147,6 +147,7 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
 
+
         /*
          * Package Service Providers...
          */
@@ -154,8 +155,8 @@ return [
         Laracasts\Flash\FlashServiceProvider::class,
         Laravel\Socialite\SocialiteServiceProvider::class,
         Creativeorange\Gravatar\GravatarServiceProvider::class,
-
-        /*
+        Intervention\Image\ImageServiceProvider::class,
+         /*
          * Application Service Providers...
          */
         App\Providers\AppServiceProvider::class,
@@ -165,6 +166,10 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\WidgetServiceProvider::class,
         App\Providers\EloquentEventServiceProvider::class,
+        App\Providers\BreadcrumsServiceProvider::class,
+        App\Providers\OnlineServiceProvider::class,
+        App\Providers\PageServiceProvider::class,
+        
     ],
 
     /*
@@ -213,10 +218,15 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+
         'Form' => Collective\Html\FormFacade::class,
-        'HTML' => Collective\Html\HtmlFacade::class,
+        'Html' => Collective\Html\HtmlFacade::class,
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
         'Gravatar' => Creativeorange\Gravatar\Facades\Gravatar::class,
+        'Breadcrumbs' => App\Helpers\Facades\BreadcrumbsFacade::class,
+        'Online' => App\Helpers\Online::class,
+        'Image' => Intervention\Image\Facades\Image::class,
+        'Page' => App\Helpers\Facades\Page::class,
 
     ],
 

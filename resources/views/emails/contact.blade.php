@@ -1,9 +1,10 @@
 @component('mail::message')
 # Introduction
 
-## Hello There {{ $contactName }}!
+Hi,
 
 Janus Nic has sent you a message.
+
 @component('mail::button', ['url' => ''])
 Button Text
 @endcomponent

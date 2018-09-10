@@ -5,24 +5,29 @@
   <div class="animate fadeIn">
     <div class="col-md-12">
       <div class="panel panel-default">
-      <div class="panel-heading">Posts <a href="{{ url('/posts/create') }}" class="btn btn-success btn-sm float-right" title="Add New Post">
-        <span data-feather="plus"></span> Add New
-      </a></div>
+      <div class="panel-heading">Posts</div>
         <div class="panel-body">
+          <a href="{{ url('/posts/create') }}" class="btn btn-success btn-sm" title="Add New Post">
+              <i class="fa fa-plus" aria-hidden="true"></i> Add New
+          </a>
+            <br/>
             @if (Session::get('message') != Null)
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                        {{ Session::get('message') }}
-                    </div>
-                </div>
-            </div>
-          @endif
+              <div class="row">
+                  <div class="col-md-9">
+                      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                          </button>
+                          {{ Session::get('message') }}
+                      </div>
+                  </div>
+              </div>
+            @endif
+
+            <br/>
             <div class="table-responsive">
-              <table class="table table-hover table-striped table-sm">
+                  
+              <table class="table table-hover">
                 <thead>
                   <tr>
                     <th>Title</th>
@@ -36,7 +41,9 @@
                         <td>{{ $post->title }}</td>
                         <td>{{ date('d F Y', strtotime($post->created_at)) }}</td>
                         <td>
-                            <a title="Read article" href="{{ route('posts.show', ['id'=> $post->id]) }}" class="btn btn-primary"><span data-feather="eye"></span></a>&nbsp;<a title="Edit article" href="{{ route('posts.edit', ['id'=> $post->id]) }}" class="btn btn-warning"><span data-feather="edit"></span></a>&nbsp;<button title="Delete post" type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete_post_{{ $post->id  }}"><span data-feather="delete"></span></button>
+                            <a title="Read article" href="{{ route('posts.show', ['id'=> $post->id]) }}" class="btn btn-primary"><span class="fa fa-newspaper-o"></span></a>
+                            <a title="Edit article" href="{{ route('posts.edit', ['id'=> $post->id]) }}" class="btn btn-warning"><span class="fa fa-edit"></span></a>
+                            <button title="Delete post" type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete_post_{{ $post->id  }}"><span class="fa fa-trash-o"></span></button>
                         </td>
                     </tr>
 

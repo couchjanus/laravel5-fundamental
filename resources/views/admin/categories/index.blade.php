@@ -1,15 +1,20 @@
 @extends('layouts.admin')
+
 @section('content')
 <div class="container-fluid">
   <div class="animate fadeIn">
-    <div class="col-md-12">
+    <div class="col-md-9">
       <div class="panel panel-default">
-        <div class="panel-heading">Categories <a href="{{ url('/categories/create') }}" class="btn btn-success btn-sm float-right" title="Add New Category">
-          <span data-feather="plus"></span> Add New
-        </a></div>
+        <div class="panel-heading"><h2>Categories</h2></div>
           <div class="panel-body">
+            <a href="{{ url('/categories/create') }}" class="btn btn-success btn-sm pull-right" title="Add New Category">
+            <i class="fa fa-plus" aria-hidden="true"></i> Add New
+            </a>
+            <br/>
+            <br/>
             <div class="table-responsive">
-              <table class="table table-hover table-striped table-sm">
+                  
+              <table class="table table-hover">
                 <thead>
                   <tr>
                     <th>Name</th>
@@ -23,9 +28,9 @@
                       <td>{{ $category->name }}</td>
                       <td>{{ date('d F Y', strtotime($category->created_at)) }}</td>
                       <td>
-                        <a title="Read category" href="{{ route('categories.show', ['id'=> $category->id]) }}" class="btn btn-primary"><span data-feather="eye"></span></a>
-                        <a title="Edit category" href="{{ route('categories.edit', ['id'=> $category->id]) }}" class="btn btn-warning"><span data-feather="edit"></span></a>
-                        <button title="Delete category" type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete_category_{{ $category->id  }}"><span data-feather="delete"></span></button>
+                        <a title="Read category" href="{{ route('categories.show', ['id'=> $category->id]) }}" class="btn btn-primary"><span class="fa fa-newspaper-o"></span></a>
+                        <a title="Edit category" href="{{ route('categories.edit', ['id'=> $category->id]) }}" class="btn btn-warning"><span class="fa fa-edit"></span></a>
+                        <button title="Delete category" type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete_category_{{ $category->id  }}"><span class="fa fa-trash-o"></span></button>
                       </td>
                     </tr>
 

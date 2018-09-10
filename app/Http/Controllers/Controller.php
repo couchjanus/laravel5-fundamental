@@ -16,7 +16,7 @@ class Controller extends BaseController
 
     public function __construct()
     {
-        // $this->breadcrumbs = Breadcrumbs::addCrumb('Home', '/');
+        $this->breadcrumbs = Breadcrumbs::addCrumb('Home', '/');
     }
     
 }

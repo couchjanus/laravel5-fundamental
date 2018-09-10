@@ -1,10 +1,6 @@
 <!-- Sidebar -->
 <div id="sidebar-wrapper">
-    
   <ul class="sidebar-nav">
-    <li class="sidebar-brand">
-        <img src="{{ $gravatar }}">
-    </li>
     <li class="sidebar-brand">
       <a href="#">
       Hello {{ Auth::user()->name}}!

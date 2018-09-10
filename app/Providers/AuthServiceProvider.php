@@ -47,14 +47,14 @@ class AuthServiceProvider extends ServiceProvider
             }
         );
         
-        // foreach ($this->getPermissions() as $permission) {
-        //     Gate::define(
-        //         $permission->slug, 
-        //         function ($user) use ($permission) {
-        //             return $user->hasRole($permission->roles);
-        //         }
-        //     );
-        // }
+        foreach ($this->getPermissions() as $permission) {
+            Gate::define(
+                $permission->slug, 
+                function ($user) use ($permission) {
+                    return $user->hasRole($permission->roles);
+                }
+            );
+        }
     }
     
     private function getPermissions()
